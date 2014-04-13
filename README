@@ -1,2 +1,21 @@
 Pour le projet d'objective caml, nous devons créer un jeu en Ocaml graphique.
 Le dossier suivant va donc contenir les codes de l'élaboration de ce jeu.
+
+
+Version 1 : 
+Lors du premier commit, nous avons modifié les fichiers de base que nous avons élaboré avec Mr Boudes notre enseignant d'Ocaml
+
+Nous avions donc les fichiers dessiner.ml qui permet de dessiner une image à l'écran,
+nous avions aussi le fichier direction.ml qui répertoirie le type direction,
+le fichier interprete que nous avons réalisé lors de TP/TD/CM qui contient l'interprète de notre langage. La version que nous avons eu pour fichier de base ne contenait pas le type expression, de plus le type instruction a été
+complété avec ce que nous avions fait en TP/TD donc un PrintStr qui permet d'afficher une chaine de caractère à l'écran, un Print qui permet d'afficher une expression et un While qui remplace le while habituel.
+
+La fonction eval a été récupérée d'un TP précédent et la fonction run a été complétée avec les nouvelles possibilités du type instruction.
+
+
+Les fichiers mobile.ml et personnage.ml contient les matrices à deux dimensions des images utilisées par notre programme.
+
+Enfin le fichier astro.ml a été renommé marioval.ml, il reprend le code du fichier astro.ml, mais nous avons effectué des modifications, la taille de la fenêtre n'est plus 350x350 mais 500x500 donc nous avons modifié le "terrain" en le mettre sur 500x500, les images ne sont plus celles qu'utilisaient l'enseignant mais nos propres images.
+Nous avons également modifié la fonction deplacer, nous l'avons modifié pour que le personnage soit toujours affiché sur le plateau. En effet, si le personnage se trouve au bord du plateau et qui veut faire encore un déplacement vers le bord il apparaitra de l'autre cote du plateau.
+
+Dans la fonction deplacer, nous avons créé une fonction dans_le_decors qui nous affiche Déplacement impossible si le joueur veut se déplacer sur un emplacement où il ne peut pas aller.
