@@ -19,3 +19,10 @@ Enfin le fichier astro.ml a été renommé marioval.ml, il reprend le code du fi
 Nous avons également modifié la fonction deplacer, nous l'avons modifié pour que le personnage soit toujours affiché sur le plateau. En effet, si le personnage se trouve au bord du plateau et qui veut faire encore un déplacement vers le bord il apparaitra de l'autre cote du plateau.
 
 Dans la fonction deplacer, nous avons créé une fonction dans_le_decors qui nous affiche Déplacement impossible si le joueur veut se déplacer sur un emplacement où il ne peut pas aller.
+
+Pour le premier jeu, qui se nomme hamsterPickPok.ml, nous avons ajouté un hamster comme personnage principal. Le joueur pourra ramasser toutes les pièces en bougeant le hamster. Pour compiler ce premier jeu, nous effectuons la commande :	ocamlmktop directions.ml interprete.ml graphics.cma mobile.ml personnage.ml dessiner.ml hamsterPickPok.ml -o HamsterPickPok
+
+Pour le second jeu, qui se nomme eleMangeur, nous avons repris le jeu du Hamster pick pocket et nous avons ajouter de nouvelles règles. L'éléphant qui est le personnage principal devra manger les fruits mais il devra le faire dans un ordre précis. Pour compiler ce jeu nous devons évaluer la commande : 	ocamlmktop directions.ml interprete.ml graphics.cma mobile.ml personnage.ml dessiner.ml eleMangeur.ml -o ElephantMangeur
+
+
+Pour jouer aux jeux, il faut lancer ./HamsterPickPok pour le premier jeu et ./ElephantMangeur pour le second. Nous devons effectuer les commandes suivantes avant de pouvoir jouer pour le premier jeu : open Interprete;; et open HamsterPickPok;;, puis pour le second jeu : open Interprete;; et open EleMangeur;;
