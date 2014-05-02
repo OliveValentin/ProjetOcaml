@@ -25,4 +25,17 @@ Pour le premier jeu, qui se nomme hamsterPickPok.ml, nous avons ajouté un hamst
 Pour le second jeu, qui se nomme eleMangeur, nous avons repris le jeu du Hamster pick pocket et nous avons ajouter de nouvelles règles. L'éléphant qui est le personnage principal devra manger les fruits mais il devra le faire dans un ordre précis. Pour compiler ce jeu nous devons évaluer la commande : 	ocamlmktop directions.ml interprete.ml graphics.cma mobile.ml personnage.ml dessiner.ml eleMangeur.ml -o ElephantMangeur
 
 
-Pour jouer aux jeux, il faut lancer ./HamsterPickPok pour le premier jeu et ./ElephantMangeur pour le second. Nous devons effectuer les commandes suivantes avant de pouvoir jouer pour le premier jeu : open Interprete;; et open HamsterPickPok;;, puis pour le second jeu : open Interprete;; et open EleMangeur;;
+Pour jouer aux jeux, il faut lancer ./HamsterPickPok pour le premier jeu et ./ElephantMangeur pour le second. Nous devons effectuer les commandes suivantes avant de pouvoir jouer pour le premier jeu : open Interprete;; et open HamstersPickpok;;, puis pour le second jeu : open Interprete;; et open EleMangeur;;
+
+
+Version 2 : 
+
+Dans les deux jeux précédents, nous avons assigné un nombre de déplacement maximum et nous avons effectué la mise en place de la map.
+Nous avons créer un troisième jeu qui est un labyrinthe. Pour gagner, nous devons récupéré la pièce qui est au bout du labyrinthe. Dans ce jeu, l'utilisateur aura une map bornée, c'est-à-dire que le joueur ne pourra pas aller à l'Est s'il se trouve tout à droite de la map.
+Nous avons également effectué un jeu labyrinthe decors qui reprend l'affichage en 2D isométriques. Nous n'avons cependant pas encore réussi à mettre en place ce jeu.
+
+Nous devons compiler le jeu labyrinthe en effectuant la commande : ocamlmktop directions.ml interprete.ml graphics.cma mobile.ml personnage.ml dessiner.ml laby.ml -o Laby
+Pour jouer aux jeux, il faut lancer ./Laby et faire un open Interprete;; et open Laby;;
+
+Pour le second jeu, nous le compilons en faisant la commande suivante : ocamlmktop directions.ml interprete.ml graphics.cma mobile.ml personnage.ml dessiner.ml roadTiles.ml labyDecors.ml -o LabyDecors.
+Pour jouer aux jeux, il faut lancer ./Laby et faire un open Interprete;; et open LabyDecors;;

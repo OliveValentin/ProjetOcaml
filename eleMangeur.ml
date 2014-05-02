@@ -5,27 +5,6 @@ let perso = Personnage.elephant;;
 (* Graphics.close_graph ();; *)
 Graphics.open_graph " 500x500";;
 
-(* let transformation_iso = function (i,j) -> (ref ((i - j)) , ref ((i + j));;
-
-
-
-let afficher_image_plateau img (i,j) = Dessiner.dessiner_image img (!j * 50) (450 - !i * 50);;
-
-let afficher_plateau () = 
-
-  afficher_image_plateau Decors.beachCornerES (transformation_iso (4, 4));
-  afficher_image_plateau Decors.beachCornerNE (transformation_iso (6, 4));
-  afficher_image_plateau Decors.beachCornerNW (transformation_iso (6, 6));
-  afficher_image_plateau Decors.beachCornerSW (transformation_iso (4, 6));
-  afficher_image_plateau Decors.beachE (transformation_iso (5, 4));
-  afficher_image_plateau Decors.beachN (transformation_iso (6, 5));
-  afficher_image_plateau Decors.beachS (transformation_iso (4, 5));
-  afficher_image_plateau Decors.beachW (transformation_iso (5, 6));
-  afficher_image_plateau Decors.beach (transformation_iso (5, 5))
-;;
-
-afficher_plateau ();;
-*)
 Graphics.set_color (Graphics.rgb 52 201 36);;
 Graphics.fill_rect 0 0 500 500;;
 Graphics.set_color (Graphics.rgb 0 128 255);;
@@ -42,13 +21,15 @@ Graphics.remember_mode false;;
 
 let afficher img (i,j) = Dessiner.dessiner_image img (!j * 50) (450 - !i * 50);;
 
-let bananes =  [(ref 5, ref 4);(ref 4,ref 5);];;
-let pommes =  [(ref 7, ref 5);(ref 5,ref 7);];;
-let cerises =  [(ref 5, ref 6);(ref 4,ref 6);];;
+let bananes =  [(ref 5, ref 2);(ref 0,ref 9);];;
+let pommes =  [(ref 9, ref 7);(ref 0,ref 0);];;
+let cerises =  [(ref 7, ref 5);(ref 4,ref 6);];;
 
-let rochers =  [(ref 1,ref 2); (ref 1,ref 4);(ref 9,ref 6);];;
+let rochers =  [(ref 1,ref 2); (ref 1,ref 4);(ref 9,ref 6);(ref 5,ref 3); (ref 7,ref 8);(ref 9,ref 9);(ref 4,ref 3); (ref 0,ref 8);(ref 2,ref 6);(ref 6,ref 2); (ref 7,ref 8);(ref 8,ref 7);];;
 
-let perso_i,perso_j = ref 5, ref 5;;
+let perso_i,perso_j = ref 5, ref 8;;
+
+let nb_deplacement_restant = ref 29;;
 
 let afficher_decor () = Graphics.synchronize();;
 let afficher_perso() = afficher perso (perso_i,perso_j);;
@@ -62,17 +43,17 @@ let afficher_mobiles () =
 
 let deplacer direction =
   let () = match direction with
-    | E -> perso_j := ((!perso_j + 1) mod 10)
-    | O -> perso_j := ((!perso_j - 1) mod 10); if (!perso_j<0) then begin perso_j := !perso_j + 10 end
-    | S -> perso_i := ((!perso_i + 1) mod 10)
-    | N -> perso_i := ((!perso_i - 1) mod 10); if (!perso_i<0) then begin perso_i := !perso_i + 10 end
+    | E -> perso_j := ((!perso_j + 1) mod 10); nb_deplacement_restant := !nb_deplacement_restant - 1
+    | O -> perso_j := ((!perso_j - 1) mod 10); if (!perso_j<0) then begin perso_j := !perso_j + 10 end;nb_deplacement_restant := !nb_deplacement_restant - 1
+    | S -> perso_i := ((!perso_i + 1) mod 10); nb_deplacement_restant := !nb_deplacement_restant - 1
+    | N -> perso_i := ((!perso_i - 1) mod 10); if (!perso_i<0) then begin perso_i := !perso_i + 10 end;nb_deplacement_restant := !nb_deplacement_restant - 1
   in
   let dans_le_decors (di, dj) = 
     if(!di,!dj) = (!perso_i,!perso_j) then (match direction with
-    | E ->  begin perso_j := (!perso_j - 1) mod 10; print_string "Déplacement impossible \n" end
-    | O -> begin perso_j := (!perso_j + 1) mod 10; print_string "Déplacement impossible \n" end
-    | S -> begin perso_i := (!perso_i - 1) mod 10; print_string "Déplacement impossible \n" end
-    | N -> begin perso_i := (!perso_i + 1) mod 10; print_string "Déplacement impossible \n" end)
+    | E ->  begin if (!perso_j < 0) then perso_j := 9 else perso_j := (!perso_j - 1) mod 10; print_string "Déplacement impossible \n"(*; nb_deplacement_restant := !nb_deplacement_restant + 1*) end
+    | O -> begin if (!perso_j > 9) then perso_j := 0 else perso_j := (!perso_j + 1) mod 10; print_string "Déplacement impossible \n"(*; nb_deplacement_restant := !nb_deplacement_restant + 1*) end
+    | S -> begin if (!perso_i < 0) then perso_i := 9 else perso_i := (!perso_i - 1) mod 10; print_string "Déplacement impossible \n"(*; nb_deplacement_restant := !nb_deplacement_restant + 1*) end
+    | N -> begin if (!perso_i > 9) then perso_i := 0 else perso_i := (!perso_i + 1) mod 10; print_string "Déplacement impossible \n"(*; nb_deplacement_restant := !nb_deplacement_restant + 1*) end)
   in
   let ramasser_cerise_impossible (di, dj) = 
     if(!di,!dj) = (!perso_i,!perso_j) then (match direction with
@@ -136,6 +117,19 @@ let deplacer direction =
     in plusdebananes ();plusdepommes ();verif_cerises cerises
     
   in
+  let plusdedeplacement () =
+	let rec verifdeplacement p q= match (!p,q) with
+	| (0,[]) -> ()
+	| (0,[x,y]) -> begin if (!x,!y)<>(-1,-1) then print_string "Vous avez perdu\nVeuillez recommencer la partie.\n" else () end
+	| (0, (x,y)::xs) -> if (!x,!y)=(-1,-1) then verifdeplacement p xs else print_string "Vous avez perdu\nVeuillez recommencer la partie.\n"
+        | (_,_) -> ()
+	
+	in verifdeplacement nb_deplacement_restant cerises
+  in
+  let afficher_deplacement_restant () = 
+	print_string "Vous etes à la position : \n\ti :";print_int(!perso_i);print_string"\n\tj :";print_int(!perso_j);
+	print_string "\nIl vous reste ";print_int(!nb_deplacement_restant);print_string" déplacement(s).\n"
+  in
 
   List.iter dans_le_decors rochers;
   List.iter ramasser_objet_mobile bananes;
@@ -143,7 +137,9 @@ let deplacer direction =
   droit_ramasser_cerise();
   afficher_decor ();
   afficher_mobiles ();
-  plusdecerises cerises;;
+  afficher_deplacement_restant ();
+  plusdecerises cerises;
+  plusdedeplacement ();;
 
 let jouer p = Interprete.run p deplacer;;
 
@@ -156,5 +152,9 @@ print_string "##############################################\n";;
 (*Auteur image dans le image50.ml *)
 print_string " Crédit image : Kenney Vleugels\n\t\thttp://fr.fordesigner.com\n\t\timg1.wikia.nocookie.net\n\t\thttp://img101.imageshack.us\n\t\thttp://www.babelio.com/\n\n";;
 
-print_string "Les règles du jeu sont simple, vous devez manger les bananes puis les pommes et enfin les cerises. La partie n'est pas terminée tant que des fruits sont sur le plateau. \n\n";;
+print_string "Les règles du jeu sont simple, vous devez manger les bananes puis les pommes et enfin les cerises. La partie n'est pas terminée tant que des fruits sont sur le plateau. Vous avez le droit à seulement 29 déplacements.\n\n";;
 afficher_mobiles ();;
+
+(* 
+jouer (Bloc[Est;Sud;Sud;Sud;Ouest;Sud])
+jouer (Bloc[Est;Est;Est;Est;Ouest;Ouest;Ouest;Nord;Nord;Nord;Nord;Nord;Est;Ouest;Sud;Ouest;Ouest;Nord;Nord;Sud;Sud;Sud;Sud;Ouest;Sud;Sud;Sud]) *)

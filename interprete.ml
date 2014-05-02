@@ -51,7 +51,4 @@ let rec run p deplacer =
   | While (expres,instruct) as w -> (match (eval expres) with
     | 0 -> ()
     | _ -> run instruct deplacer; run w deplacer)
-  
-
-
 ;;
